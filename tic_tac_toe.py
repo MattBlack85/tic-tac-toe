@@ -1,6 +1,17 @@
 import itertools
 import random
 
+ASCII_TABLE = "     |     |     \n" \
+              "     |     |     \n" \
+              "_____|_____|_____\n" \
+              "     |     |     \n" \
+              "     |     |     \n" \
+              "_____|_____|_____\n" \
+              "     |     |     \n" \
+              "     |     |     \n" \
+              "     |     |     \n" \
+              "\n" \
+              "  TIC-TAC-TOE\n"
 
 
 class Table(object):
@@ -74,6 +85,7 @@ def main():
     global table
     table = Table()
     start = None
+    print ASCII_TABLE
 
     while not start:
         players = int(raw_input("How many human players will play? (0-2): "))
