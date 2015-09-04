@@ -1,7 +1,6 @@
 import itertools
 import random
 
-from players import AbstractPlayer
 
 
 class Table(object):
