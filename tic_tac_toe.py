@@ -18,6 +18,7 @@ class Table(object):
 
     def __init__(self):
         self.grid = range(1, 10)
+        self.table_representation = ASCII_TABLE
         self.win_combinations = [
             [1, 2, 3],
             [1, 4, 7],
@@ -29,16 +30,35 @@ class Table(object):
             [7, 8, 9],
         ]
 
-    def occupy_cell(self, N):
-        self.grid.remove(N)
+    def mark_ascii_cell(self, grid_place, player_mark):
+        return {
+            1: self._replace_cell(21, grid_place, player_mark),
+            2: self._replace_cell(27, grid_place, player_mark),
+            3: self._replace_cell(33, grid_place, player_mark),
+            4: self._replace_cell(75, grid_place, player_mark),
+            5: self._replace_cell(81, grid_place, player_mark),
+            6: self._replace_cell(87, grid_place, player_mark),
+            7: self._replace_cell(129, grid_place, player_mark),
+            8: self._replace_cell(135, grid_place, player_mark),
+            9: self._replace_cell(141, grid_place, player_mark),
+        }
+
+    def _replace_cell(self, ascii_place, grid_place, player_mark):
+        return self.table_representation[:ascii_place - 1] + \
+            player_mark + self.table_representation[ascii_place:]
+
+    def occupy_cell(self, grid_place, player_mark):
+        self.grid.remove(grid_place)
+        self.table_representation = self.mark_ascii_cell(grid_place, player_mark).get(grid_place)
 
 
 class AbstractPlayer(object):
 
-    def __init__(self, name=None, human=False):
+    def __init__(self, mark, name=None, human=False):
         self.human = human
         self.owned_cells = []
         self.name = name or "AI" + str(random.randint(1, 10))
+        self.mark = mark
 
     def _check_if_win(self):
         if table.grid:
@@ -47,6 +67,7 @@ class AbstractPlayer(object):
             for combination in c:
                 if list(combination) in table.win_combinations:
                     print("Player " + self.name + " wins!")
+                    print(table.table_representation)
                     exit(0)
 
     def move(self, N=None):
@@ -62,13 +83,14 @@ class AbstractPlayer(object):
         self.owned_cells.append(N)
         self.owned_cells.sort()
         self._check_if_win()
+        print(table.table_representation)
 
 
 class HumanPlayer(AbstractPlayer):
 
     def _occupy_cell(self, N):
         if N in table.grid and 0 < N < 10:
-            table.occupy_cell(N)
+            table.occupy_cell(N, self.mark)
         else:
             print("You are choosing an occupied cell or a non existing one")
 
@@ -92,17 +114,17 @@ def main():
 
         if 0 <= players < 3:
             if players == 0:
-                player1 = AIPlayer()
-                player2 = AIPlayer()
+                player1 = AIPlayer(mark='X')
+                player2 = AIPlayer(mark='O')
             elif players == 1:
                 name = raw_input("Please type the name of the player: ")
-                player1 = HumanPlayer(name, True)
-                player2 = AIPlayer()
+                player1 = HumanPlayer('X', name, True)
+                player2 = AIPlayer(mark='O')
             elif players == 2:
                 name = raw_input("Please type the name of the first player: ")
-                player1 = HumanPlayer(name, True)
+                player1 = HumanPlayer('X', name, True)
                 name = raw_input("Please type the name of the second player: ")
-                player2 = HumanPlayer(name, True)
+                player2 = HumanPlayer('O', name, True)
             start = True
 
     for turn in range(9):
@@ -116,6 +138,7 @@ def main():
             player2.move(N)
 
     print("What a match, we have a draw!")
+    print(table.table_representation)
 
 
 if __name__ == "__main__":
