@@ -17,7 +17,7 @@ ASCII_TABLE = "     |     |     \n" \
 class Table(object):
 
     def __init__(self):
-        self.grid = range(1, 10)
+        self.grid = list(range(1, 10))
         self.table_representation = ASCII_TABLE
         self.win_combinations = [
             [1, 2, 3],
@@ -107,33 +107,33 @@ def main():
     global table
     table = Table()
     start = None
-    print ASCII_TABLE
+    print(ASCII_TABLE)
 
     while not start:
-        players = int(raw_input("How many human players will play? (0-2): "))
+        players = int(input("How many human players will play? (0-2): "))
 
         if 0 <= players < 3:
             if players == 0:
                 player1 = AIPlayer(mark='X')
                 player2 = AIPlayer(mark='O')
             elif players == 1:
-                name = raw_input("Please type the name of the player: ")
+                name = input("Please type the name of the player: ")
                 player1 = HumanPlayer('X', name, True)
                 player2 = AIPlayer(mark='O')
             elif players == 2:
-                name = raw_input("Please type the name of the first player: ")
+                name = input("Please type the name of the first player: ")
                 player1 = HumanPlayer('X', name, True)
-                name = raw_input("Please type the name of the second player: ")
+                name = input("Please type the name of the second player: ")
                 player2 = HumanPlayer('O', name, True)
             start = True
 
     for turn in range(9):
         if turn % 2 == 0:
-            N = int(raw_input("Please choose a cell " + player1.name + ": ")
+            N = int(input("Please choose a cell " + player1.name + ": ")
                     ) if player1.human else None
             player1.move(N)
         else:
-            N = int(raw_input("Please choose a cell " + player2.name + ": ")
+            N = int(input("Please choose a cell " + player2.name + ": ")
                     ) if player2.human else None
             player2.move(N)
 
